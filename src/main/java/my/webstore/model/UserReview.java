@@ -1,6 +1,5 @@
 package my.webstore.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,22 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor
-public class Product {
+@Data @AllArgsConstructor @NoArgsConstructor
+public class UserReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String title;
+    private Integer userId;
+    private Integer reviewedUserId;
+    private Integer rating; // 1 to 5
     private String description;
-    private BigDecimal price; // decimal with a given no of decimal points
-    private Integer rating;
-    private Integer inStock;
-    private Integer sellerId;
-    // imageUrl
-
 }

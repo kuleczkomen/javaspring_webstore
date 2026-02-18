@@ -1,6 +1,5 @@
 package my.webstore.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,21 +9,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor
-public class Product {
+@Data @AllArgsConstructor @NoArgsConstructor
+public class OrderDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private Integer prodId;
     private String title;
     private String description;
-    private BigDecimal price; // decimal with a given no of decimal points
-    private Integer rating;
-    private Integer inStock;
-    private Integer sellerId;
-    // imageUrl
-
+    private Integer quantity;
+    private BigDecimal price;
+    // image
 }

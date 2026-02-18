@@ -23,7 +23,24 @@ public class ProductService {
         return repo.findAll();
     }
 
-    public Product getProductById() {
-        return repo.findAllById().getFirst();
+    public Product getProductById(int prodId) {
+        return repo.findById(prodId)
+                .orElse(new Product()); // give status code?
+    }
+
+    public void addProduct(Product product) {
+        repo.save(product);
+    }
+
+    public void deleteProduct(int prodId) {
+        repo.deleteById(prodId);
+    }
+
+    public void updateProduct(Product product) {
+        repo.save(product);
+    }
+
+    public List<Product> searchProducts(String keyword) {
+        return repo.searchProducts(keyword);
     }
 }
