@@ -1,10 +1,7 @@
 package my.webstore.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +19,7 @@ public class Product {
     private String title;
     private String description;
     private BigDecimal price; // decimal with a given no of decimal points
-    private Integer rating;
+    private Integer rating; // one to five
     private Integer inStock;
     private Integer sellerId;
     // imageUrl

@@ -20,6 +20,8 @@ public class ProductService {
     private final ProductRepo repo;
 
     public List<Product> getProducts() {
+        List<Product> products = repo.findAll();
+        IO.println(products.size());
         return repo.findAll();
     }
 
@@ -43,4 +45,5 @@ public class ProductService {
     public List<Product> searchProducts(String keyword) {
         return repo.searchProducts(keyword);
     }
+
 }
