@@ -1,9 +1,12 @@
 package my.webstore.service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import my.webstore.config.SecurityConfig;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,12 +17,13 @@ import java.util.List;
 public class UserService {
 
     private final UserRepo repo;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfig.getStrength());
 
     public List<User> getUsers() {
         return repo.findAll();
     }
 
-    public void addUser(User user) {
+    public void register(User user) {
         // not allowing users with the same email
         repo.findByEmail(user.getEmail()).ifPresent(u -> {
             throw new ResponseStatusException(
@@ -27,7 +31,7 @@ public class UserService {
                     "Email already in database"
             );
         });
-
+        user.setPassword(encoder.encode(user.getPassword()));
         repo.save(user);
     }
 

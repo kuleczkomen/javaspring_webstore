@@ -1,7 +1,9 @@
 package my.webstore.config;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import my.webstore.service.MyUserDetailsService;
+import my.webstore.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -20,6 +23,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final MyUserDetailsService userDetailsService;
+    @Getter
+    private static final int strength = 10;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -42,7 +47,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance()); // deprecated
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(strength));
         return provider;
     }
 }
