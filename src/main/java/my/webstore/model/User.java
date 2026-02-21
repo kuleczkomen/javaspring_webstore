@@ -13,6 +13,7 @@ public class User {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String email;
+    @Column(unique = true)
+    private String email; // serves as username too
     private String password;
 }

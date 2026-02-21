@@ -29,11 +29,6 @@ public class ProductController {
         return service.getProductById(prodId);
     }
 
-    @GetMapping("/csrf-token")
-    public CsrfToken getCsrfToken(HttpServletRequest request) {
-        return (CsrfToken) request.getAttribute("_csrf");
-    }
-
     @PostMapping("/products")
     public void addProduct(@RequestBody Product product) {
         service.addProduct(product);
