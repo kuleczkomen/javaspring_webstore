@@ -31,6 +31,14 @@ public class UserService {
                     "Email already in database"
             );
         });
+
+        if(user.getPassword().length() < 6) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNPROCESSABLE_CONTENT,
+                    "Password must be at least 6 characters"
+            );
+        };
+
         user.setPassword(encoder.encode(user.getPassword()));
         repo.save(user);
     }
