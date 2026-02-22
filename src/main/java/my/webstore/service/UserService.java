@@ -6,6 +6,9 @@ import my.webstore.config.SecurityConfig;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,6 +20,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepo repo;
+    private final JWTService jwtService;
+    private final AuthenticationManager authManager;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfig.getStrength());
 
     public List<User> getUsers() {
@@ -44,4 +49,12 @@ public class UserService {
     }
 
 
+    public String verify(User user) {
+        Authentication auth =
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        if(auth.isAuthenticated()) {
+            return jwtService.generateToken(user.getEmail());
+        }
+        return "Failed to log in!";
+    }
 }
