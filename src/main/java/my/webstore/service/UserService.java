@@ -22,7 +22,7 @@ public class UserService {
     private final UserRepo repo;
     private final JWTService jwtService;
     private final AuthenticationManager authManager;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfig.getStrength());
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfig.getSTRENGTH());
 
     public List<User> getUsers() {
         return repo.findAll();

@@ -2,6 +2,7 @@ package my.webstore.config;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import my.webstore.filter.JwtFilter;
 import my.webstore.service.MyUserDetailsService;
 import my.webstore.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration // this is a config file
 @EnableWebSecurity // this config overrides default spring config
@@ -25,8 +27,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final MyUserDetailsService userDetailsService;
+    private final JwtFilter jwtFilter;
     @Getter
-    private static final int strength = 10;
+    private static final int STRENGTH = 10;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -35,14 +38,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // every http request must be authenticated, eexcept login and register
                 .authorizeHttpRequests(r -> r
-                        .requestMatchers("/api/register", "/api/login")
-                        .permitAll()
-                        .anyRequest().authenticated())
+                .requestMatchers("/api/register", "/api/login")
+                .permitAll()
+                .anyRequest().authenticated())
                 // login form
                 .httpBasic(Customizer.withDefaults())
                 // http is stateless
                 .sessionManagement(s -> s
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // using jwt filter before user and password filter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
 
@@ -51,7 +56,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(new BCryptPasswordEncoder(strength));
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(STRENGTH));
         return provider;
     }
 
