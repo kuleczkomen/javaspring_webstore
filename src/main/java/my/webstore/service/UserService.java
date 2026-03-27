@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -37,10 +38,10 @@ public class UserService {
             );
         });
 
-        if(user.getPassword().length() < 6) {
+        if(user.getPassword().length() < 3) {
             throw new ResponseStatusException(
                     HttpStatus.UNPROCESSABLE_CONTENT,
-                    "Password must be at least 6 characters"
+                    "Password must be at least 3 characters"
             );
         };
 
@@ -56,5 +57,9 @@ public class UserService {
             return jwtService.generateToken(user.getEmail());
         }
         return "Failed to log in!";
+    }
+
+    public User getCurrentUser(int id) {
+        return (User) repo.findAllById(Collections.singleton(id));
     }
 }

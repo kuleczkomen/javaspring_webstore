@@ -23,4 +23,8 @@ public class OrdersService {
     public List<Order> getOrders() {
         return repo.findAll();
     }
+
+    public void addOrder(Order order) {
+        repo.save(order);
+    }
 }

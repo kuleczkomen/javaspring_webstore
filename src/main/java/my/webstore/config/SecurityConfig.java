@@ -36,7 +36,7 @@ public class SecurityConfig {
         return http
                 // csrf is not saved -> logging in another browser requires new authentication
                 .csrf(csrf -> csrf.disable())
-                // every http request must be authenticated, eexcept login and register
+                // every http request must be authenticated, except login and register
                 .authorizeHttpRequests(r -> r
                 .requestMatchers("/api/register", "/api/login")
                 .permitAll()

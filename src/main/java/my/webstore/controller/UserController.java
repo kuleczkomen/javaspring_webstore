@@ -20,6 +20,11 @@ public class UserController {
         return service.getUsers();
     }
 
+    @GetMapping("/users/me")
+    public User getCurrentUser(int id) {
+        return service.getCurrentUser(id);
+    }
+
     @PostMapping("/register")
     public void register(@RequestBody User user) {
         service.register(user);

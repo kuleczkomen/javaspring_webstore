@@ -27,5 +27,9 @@ public class OrderController {
         return new ResponseEntity<>(service.getOrders(), HttpStatus.OK);
     }
 
+    @PostMapping("/")
+    public void addOrder(@RequestBody Order order) {
+        service.addOrder(order);
+    }
 
 }
