@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
@@ -59,7 +60,8 @@ public class UserService {
         return "Failed to log in!";
     }
 
-    public User getCurrentUser(int id) {
-        return (User) repo.findAllById(Collections.singleton(id));
+    public User getCurrentUser(@RequestParam Integer id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User #%d not found".formatted(id)));
     }
 }

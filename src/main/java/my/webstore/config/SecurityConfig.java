@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // every http request must be authenticated, except login and register
                 .authorizeHttpRequests(r -> r
-                .requestMatchers("/api/register", "/api/login")
+                .requestMatchers("/api/users/register", "/api/users/login")
                 .permitAll()
                 .anyRequest().authenticated())
                 // login form

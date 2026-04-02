@@ -9,19 +9,19 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService service;
 
-    @GetMapping("/users")
+    @GetMapping("/")
     public List<User> getUsers() {
         return service.getUsers();
     }
 
-    @GetMapping("/users/me")
-    public User getCurrentUser(int id) {
+    @GetMapping("/me")
+    public User getCurrentUser(Integer id) {
         return service.getCurrentUser(id);
     }
 

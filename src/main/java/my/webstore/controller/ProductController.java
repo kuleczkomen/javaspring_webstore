@@ -13,38 +13,38 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 @RequiredArgsConstructor // so we're using constructor injection
 public class ProductController {
 
     private final ProductService service;
 
-    @GetMapping("/products")
+    @GetMapping("/")
     public ResponseEntity<List<Product>> getProducts() {
         return new ResponseEntity<>(service.getProducts(), HttpStatus.OK);
     }
 
-    @GetMapping("/products/{prodId}")
+    @GetMapping("/{prodId}")
     public Product getProductById(@PathVariable int prodId) {
         return service.getProductById(prodId);
     }
 
-    @PostMapping("/products")
+    @PostMapping("/")
     public void addProduct(@RequestBody Product product) {
         service.addProduct(product);
     }
 
-    @DeleteMapping("/products")
-    public void deleteProduct(int prodId) {
+    @DeleteMapping("/{prodId}")
+    public void deleteProduct(@PathVariable int prodId) {
         service.deleteProduct(prodId);
     }
 
-    @PutMapping("/products")
+    @PutMapping("/")
     public void updateProduct(@RequestBody Product product) {
         service.updateProduct(product);
     }
 
-    @GetMapping("/products/search")
+    @GetMapping("/search")
     public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
         IO.println("Searching with: %s".formatted(keyword));
         List<Product> products = service.searchProducts(keyword);
