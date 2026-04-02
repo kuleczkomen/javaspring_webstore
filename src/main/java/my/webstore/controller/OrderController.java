@@ -2,9 +2,13 @@ package my.webstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.webstore.model.Order;
+import my.webstore.request.OrderRequest;
 import my.webstore.service.OrdersService;
+import my.webstore.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,20 +20,21 @@ import java.util.List;
 public class OrderController {
 
     private final OrdersService service;
+    private final UserService userService;
 
-    @GetMapping("/list/{userId}")
-    public ResponseEntity<List<Order>> getOrdersByUserId(@PathVariable int userId) {
-        return new ResponseEntity<>(service.getOrdersByUserId(userId), HttpStatus.OK);
+    @GetMapping("/my-orders")
+    public ResponseEntity<List<Order>> getUsersOrders(@AuthenticationPrincipal UserDetails userDetails) {
+        return new ResponseEntity<>(service.getOrdersByUserId(userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/")
     public ResponseEntity<List<Order>> getOrders() {
         return new ResponseEntity<>(service.getOrders(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public void addOrder(@RequestBody Order order) {
-        service.addOrder(order);
+    public void addOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderRequest request) {
+        service.addOrder(userDetails.getUsername(), request);
     }
 
 }

@@ -2,14 +2,17 @@ package my.webstore.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Data
+@Builder
 @Table(name = "orders") // because user is a keyword
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
     @Id

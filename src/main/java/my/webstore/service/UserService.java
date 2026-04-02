@@ -60,8 +60,11 @@ public class UserService {
 
     public User getUser(String email) {
         return repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User %s not found".formatted(email
-                )));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    public int getUserId(String email) {
+        return getUser(email).getId();
     }
 
     public void changePassword(User user, PasswordRequest request) {
