@@ -1,20 +1,18 @@
 package my.webstore.service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import my.webstore.config.SecurityConfig;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
+import my.webstore.request.PasswordRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -39,9 +37,9 @@ public class UserService {
             );
         });
 
-        if(user.getPassword().length() < 3) {
+        if (!validatePassword(user.getPassword())) {
             throw new ResponseStatusException(
-                    HttpStatus.UNPROCESSABLE_CONTENT,
+                    HttpStatus.BAD_REQUEST,
                     "Password must be at least 3 characters"
             );
         };
@@ -55,13 +53,41 @@ public class UserService {
         Authentication auth =
                 authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
         if(auth.isAuthenticated()) {
-            return jwtService.generateToken(user.getEmail());
+            return jwtService.generateToken(user.getEmail(), user.getId());
         }
         return "Failed to log in!";
     }
 
-    public User getCurrentUser(@RequestParam Integer id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User #%d not found".formatted(id)));
+    public User getUser(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User %s not found".formatted(email
+                )));
+    }
+
+    public void changePassword(User user, PasswordRequest request) {
+        // we compare hashes as oldPassword is stored in DB as a hash
+        if(!encoder.matches(request.oldPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Old password is incorrect");
+        }
+
+        if(encoder.matches(request.newPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is the same");
+        };
+
+        if(!validatePassword(request.newPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
+        };
+
+        // here we only need to compare string values
+        if(!request.newPassword().equals(request.repeatPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords don't match");
+        }
+
+        user.setPassword(encoder.encode(request.newPassword()));
+        repo.save(user);
+    }
+
+    private boolean validatePassword(String password) {
+        return password.length() >= 3;
     }
 }

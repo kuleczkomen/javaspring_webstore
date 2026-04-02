@@ -2,7 +2,10 @@ package my.webstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.webstore.model.User;
+import my.webstore.request.PasswordRequest;
 import my.webstore.service.UserService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public User getCurrentUser(Integer id) {
-        return service.getCurrentUser(id);
+    public User getUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return service.getUser(userDetails.getUsername());
     }
 
     @PostMapping("/register")
@@ -33,5 +36,10 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestBody User user) {
         return service.verify(user);
+    }
+
+    @PutMapping("/change-password")
+    public void changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PasswordRequest request) {
+        service.changePassword(service.getUser(userDetails.getUsername()), request);
     }
 }
