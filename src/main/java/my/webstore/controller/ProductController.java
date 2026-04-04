@@ -27,20 +27,6 @@ public class ProductController {
         return service.getProductById(prodId);
     }
 
-    @PostMapping("/")
-    public void addProduct(@RequestBody Product product) {
-        service.addProduct(product);
-    }
-
-    @DeleteMapping("/{prodId}")
-    public void deleteProduct(@PathVariable int prodId) {
-        service.deleteProduct(prodId);
-    }
-
-    @PutMapping("/")
-    public void updateProduct(@RequestBody Product product) {
-        service.updateProduct(product);
-    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {

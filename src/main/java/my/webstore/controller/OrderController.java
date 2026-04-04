@@ -27,11 +27,6 @@ public class OrderController {
         return new ResponseEntity<>(service.getOrdersByUserId(userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<Order>> getOrders() {
-        return new ResponseEntity<>(service.getOrders(), HttpStatus.OK);
-    }
-
     @PostMapping("/")
     public void addOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderRequest request) {
         service.addOrder(userDetails.getUsername(), request);

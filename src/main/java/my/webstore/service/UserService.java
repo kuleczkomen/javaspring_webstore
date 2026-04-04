@@ -2,9 +2,11 @@ package my.webstore.service;
 
 import lombok.RequiredArgsConstructor;
 import my.webstore.config.SecurityConfig;
+import my.webstore.model.Role;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
 import my.webstore.request.PasswordRequest;
+import my.webstore.request.RegisterRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,23 +30,23 @@ public class UserService {
         return repo.findAll();
     }
 
-    public void register(User user) {
+    public void register(RegisterRequest request) {
         // not allowing users with the same email
-        repo.findByEmail(user.getEmail()).ifPresent(u -> {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Email already in database"
-            );
+        repo.findByEmail(request.email()).ifPresent(u -> {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in database");
         });
 
-        if (!validatePassword(user.getPassword())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Password must be at least 3 characters"
-            );
+        if (!validatePassword(request.password())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password must be at least 3 characters");
         };
 
-        user.setPassword(encoder.encode(user.getPassword()));
+        User user = User.builder()
+                    .firstName(request.firstName())
+                    .lastName(request.lastName())
+                    .email(request.email())
+                    .password(encoder.encode(request.password()))
+                    .role(Role.ROLE_USER)
+                    .build();
         repo.save(user);
     }
 
