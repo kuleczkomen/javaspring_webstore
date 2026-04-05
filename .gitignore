@@ -36,3 +36,6 @@ build/
 .zip
 
 .gitattributes
+
+#env
+.env

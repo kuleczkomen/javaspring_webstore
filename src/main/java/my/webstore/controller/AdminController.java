@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import my.webstore.model.Order;
 import my.webstore.model.Product;
 import my.webstore.model.User;
+import my.webstore.request.AdminLoginRequest;
 import my.webstore.request.AdminRegisterRequest;
+import my.webstore.response.UserResponseForAdmin;
 import my.webstore.service.AdminService;
 import my.webstore.service.OrdersService;
 import my.webstore.service.ProductService;
@@ -25,16 +27,22 @@ public class AdminController {
     private final OrdersService ordersService;
     private final ProductService productService;
 
+
     /* login and register */
     @PostMapping("/login")
-    public ResponseEntity<?> loginAdmin(@RequestBody AdminRegisterRequest request) {
+    public ResponseEntity<?> loginAdmin(@RequestBody AdminLoginRequest request) {
         return service.loginAdmin(request);
+    }
+
+    @PostMapping("/register")
+    public void registerAdmin(@RequestBody AdminRegisterRequest request) {
+        service.registerAdmin(request);
     }
 
     /* users */
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.getUsers();
+    public List<UserResponseForAdmin> getUsers() {
+        return service.getUsers();
     }
 
     /* orders */

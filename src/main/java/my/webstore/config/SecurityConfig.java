@@ -33,7 +33,10 @@ public class SecurityConfig {
                 // csrf is not saved -> logging in another browser requires new authentication
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(r -> r
+                    .requestMatchers("/error").permitAll()
                     .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        //to change
+                    .requestMatchers("/api/admin/login", "/api/admin/register").permitAll()
                     .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated())

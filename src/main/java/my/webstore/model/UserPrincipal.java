@@ -2,7 +2,6 @@ package my.webstore.model;
 
 import lombok.AllArgsConstructor;
 import org.jspecify.annotations.Nullable;
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

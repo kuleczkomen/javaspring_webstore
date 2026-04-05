@@ -21,7 +21,7 @@ public class OrdersService {
     private final UserService userService;
 
     public List<Order> getOrdersByUserId(String email) {
-        User user = userService.getUser(email);
+        User user = userService.getAllUserData(email);
         return repo.findByUserId(user.getId());
     }
 
