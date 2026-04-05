@@ -2,7 +2,7 @@ package my.webstore.controller;
 
 import lombok.AllArgsConstructor;
 import my.webstore.model.ProductReview;
-import my.webstore.request.ProductReviewRequest;
+import my.webstore.http.request.ProductReviewRequest;
 import my.webstore.service.ProductReviewService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

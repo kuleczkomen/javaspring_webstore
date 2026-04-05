@@ -4,14 +4,10 @@ import lombok.RequiredArgsConstructor;
 import my.webstore.model.Order;
 import my.webstore.model.User;
 import my.webstore.repo.OrdersRepo;
-import my.webstore.repo.UserRepo;
-import my.webstore.request.OrderRequest;
-import org.springframework.http.HttpStatus;
+import my.webstore.http.request.OrderRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

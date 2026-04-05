@@ -1,4 +1,4 @@
-package my.webstore.response;
+package my.webstore.http.response;
 
 import my.webstore.model.Role;
 

@@ -1,13 +1,12 @@
 package my.webstore.service;
 
-import lombok.AllArgsConstructor;
 import my.webstore.config.SecurityConfig;
 import my.webstore.model.Role;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
-import my.webstore.request.AdminLoginRequest;
-import my.webstore.request.AdminRegisterRequest;
-import my.webstore.response.UserResponseForAdmin;
+import my.webstore.http.request.AdminLoginRequest;
+import my.webstore.http.request.AdminRegisterRequest;
+import my.webstore.http.response.UserResponseForAdmin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

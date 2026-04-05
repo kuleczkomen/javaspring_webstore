@@ -1,4 +1,4 @@
-package my.webstore.request;
+package my.webstore.http.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import my.webstore.model.OrderStatus;

@@ -5,10 +5,10 @@ import my.webstore.config.SecurityConfig;
 import my.webstore.model.Role;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
-import my.webstore.request.LoginRequest;
-import my.webstore.request.PasswordRequest;
-import my.webstore.request.RegisterRequest;
-import my.webstore.response.UserResponse;
+import my.webstore.http.request.LoginRequest;
+import my.webstore.http.request.PasswordRequest;
+import my.webstore.http.request.RegisterRequest;
+import my.webstore.http.response.UserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

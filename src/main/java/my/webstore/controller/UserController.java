@@ -1,21 +1,15 @@
 package my.webstore.controller;
 
 import lombok.RequiredArgsConstructor;
-import my.webstore.model.User;
-import my.webstore.repo.UserRepo;
-import my.webstore.request.LoginRequest;
-import my.webstore.request.PasswordRequest;
-import my.webstore.request.RegisterRequest;
-import my.webstore.response.UserResponse;
+import my.webstore.http.request.LoginRequest;
+import my.webstore.http.request.PasswordRequest;
+import my.webstore.http.request.RegisterRequest;
+import my.webstore.http.response.UserResponse;
 import my.webstore.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
