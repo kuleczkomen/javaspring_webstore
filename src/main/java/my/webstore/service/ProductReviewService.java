@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +25,13 @@ public class ProductReviewService {
     }
 
     public void addProductReview(String email, ProductReviewRequest request) {
-        // check if product exists
-        Product product = productService.getProductById(request.productId());
-        if(product.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product doesn't exist");
+        int userId = userService.getUserId(email);
+        if(isReviewAlreadyAdded(request.productId(), email)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "You've already reviewed this product");
         }
-
-        Integer userId = userService.getUserId(email);
+        if(!verifyRating(request.rating())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rating must be 1 to 5");
+        }
 
         ProductReview review = ProductReview.builder()
                 .userId(userId)
@@ -39,5 +40,38 @@ public class ProductReviewService {
                 .description(request.description())
                 .build();
         repo.save(review);
+    }
+
+    public void deleteProductReview(String email, int prodId) {
+        ProductReview review = getReviewOrThrow(email, prodId);
+        repo.delete(review);
+    }
+
+    public void updateReviewRating(String email, int prodId, int rating) {
+        if(!verifyRating(rating)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review must be 1 to 5");
+        }
+        ProductReview review = getReviewOrThrow(email, prodId);
+        review.setRating(rating);
+        repo.save(review);
+    }
+
+    public void updateReviewDescription(String email, int prodId, String description) {
+        ProductReview review = getReviewOrThrow(email, prodId);
+        review.setDescription(description);
+        repo.save(review);
+    }
+
+    private boolean verifyRating(int rating){
+        return rating >= 1 && rating <= 5;
+    }
+
+    private boolean isReviewAlreadyAdded(int prodId, String email) {
+        return repo.existsProductReviewsByProductIdAndUserId(prodId, userService.getUserId(email));
+    }
+
+    private ProductReview getReviewOrThrow(String email, int prodId) {
+        return repo.findProductReviewByProductIdAndUserId(prodId, userService.getUserId(email))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Review doesn't exist"));
     }
 }

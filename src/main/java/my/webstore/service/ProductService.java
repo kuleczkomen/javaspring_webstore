@@ -3,7 +3,9 @@ package my.webstore.service;
 import lombok.RequiredArgsConstructor;
 import my.webstore.model.Product;
 import my.webstore.repo.ProductRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class ProductService {
 
     public Product getProductById(int prodId) {
         return repo.findById(prodId)
-                .orElse(new Product()); // give status code?
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
     }
 
     public void addProduct(Product product) {
@@ -39,6 +41,8 @@ public class ProductService {
     }
 
     public void updateProduct(Product product) {
+        Product _ = repo.findById(product.getId())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product doesn't exist"));
         repo.save(product);
     }
 
