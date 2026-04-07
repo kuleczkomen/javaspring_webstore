@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.webstore.model.Order;
 import my.webstore.model.User;
 import my.webstore.repo.OrdersRepo;
-import my.webstore.http.request.OrderRequest;
+import my.webstore.http.request.order.OrderRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

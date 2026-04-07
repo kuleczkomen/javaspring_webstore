@@ -1,4 +1,4 @@
-package my.webstore.http.request;
+package my.webstore.http.request.user;
 
 public record RegisterRequest(
         String firstName,

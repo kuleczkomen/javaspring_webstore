@@ -2,7 +2,7 @@ package my.webstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import my.webstore.model.Order;
-import my.webstore.http.request.OrderRequest;
+import my.webstore.http.request.order.OrderRequest;
 import my.webstore.service.OrdersService;
 import my.webstore.service.UserService;
 import org.springframework.http.HttpStatus;

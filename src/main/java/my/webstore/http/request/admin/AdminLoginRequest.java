@@ -1,4 +1,4 @@
-package my.webstore.http.request;
+package my.webstore.http.request.admin;
 
 public record AdminLoginRequest(
         String email,

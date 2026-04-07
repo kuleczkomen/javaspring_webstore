@@ -1,10 +1,10 @@
 package my.webstore.controller;
 
 import lombok.AllArgsConstructor;
-import my.webstore.http.request.DescriptionRequest;
-import my.webstore.http.request.RatingRequest;
+import my.webstore.http.request.review.UpdateDescriptionRequest;
+import my.webstore.http.request.review.UpdateRatingRequest;
 import my.webstore.model.ProductReview;
-import my.webstore.http.request.ProductReviewRequest;
+import my.webstore.http.request.review.ProductReviewRequest;
 import my.webstore.service.ProductReviewService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,12 +35,12 @@ public class ProductReviewController {
     }
 
     @PatchMapping("/{prodId}/rating")
-    public void updateReviewRating(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int prodId, @RequestBody RatingRequest request) {
+    public void updateReviewRating(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int prodId, @RequestBody UpdateRatingRequest request) {
         service.updateReviewRating(userDetails.getUsername(), prodId, request.rating());
     }
 
     @PatchMapping("/{prodId}/descr")
-    public void updateReviewDescription(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int prodId, @RequestBody DescriptionRequest request) {
+    public void updateReviewDescription(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int prodId, @RequestBody UpdateDescriptionRequest request) {
         service.updateReviewDescription(userDetails.getUsername(), prodId, request.description());
     }
 }

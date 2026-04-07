@@ -1,9 +1,9 @@
 package my.webstore.controller;
 
 import lombok.RequiredArgsConstructor;
-import my.webstore.http.request.LoginRequest;
-import my.webstore.http.request.PasswordRequest;
-import my.webstore.http.request.RegisterRequest;
+import my.webstore.http.request.user.LoginRequest;
+import my.webstore.http.request.user.PasswordRequest;
+import my.webstore.http.request.user.RegisterRequest;
 import my.webstore.http.response.UserResponse;
 import my.webstore.service.UserService;
 import org.springframework.http.ResponseEntity;

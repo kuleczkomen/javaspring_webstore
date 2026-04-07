@@ -1,16 +1,14 @@
 package my.webstore.service;
 
 import lombok.RequiredArgsConstructor;
-import my.webstore.model.Product;
 import my.webstore.model.ProductReview;
 import my.webstore.repo.ProductReviewRepo;
-import my.webstore.http.request.ProductReviewRequest;
+import my.webstore.http.request.review.ProductReviewRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
