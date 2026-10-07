@@ -38,19 +38,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // every http request must be authenticated, eexcept login and register
                 .authorizeHttpRequests(r -> r
-                .requestMatchers("/api/register", "/api/login")
-                .permitAll()
+                .requestMatchers(
+                        "/api/register",
+                        "/api/login"
+                    ).permitAll()
                 .anyRequest().authenticated())
                 // login form
                 .httpBasic(Customizer.withDefaults())
-                // http is stateless
                 .sessionManagement(s -> s
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // using jwt filter before user and password filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
-
     }
 
     @Bean

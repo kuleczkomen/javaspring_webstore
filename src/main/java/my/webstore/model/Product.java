@@ -22,6 +22,6 @@ public class Product {
     private Integer rating; // one to five
     private Integer inStock;
     private Integer sellerId;
-    // imageUrl
+    private String imageUrl;
 
 }

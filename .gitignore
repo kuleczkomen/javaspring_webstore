@@ -34,3 +34,4 @@ build/
 
 # safety
 src/main/resources/application.properties
+.env

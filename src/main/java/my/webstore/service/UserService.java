@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import my.webstore.config.SecurityConfig;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,10 +26,12 @@ public class UserService {
     private final AuthenticationManager authManager;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfig.getSTRENGTH());
 
+    @Cacheable(value = "usersList", key="'all'")
     public List<User> getUsers() {
         return repo.findAll();
     }
 
+    @CacheEvict(value = "usersList", allEntries = true)
     public void register(User user) {
         // not allowing users with the same email
         repo.findByEmail(user.getEmail()).ifPresent(u -> {
