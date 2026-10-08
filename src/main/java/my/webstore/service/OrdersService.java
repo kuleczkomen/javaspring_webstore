@@ -18,7 +18,7 @@ public class OrdersService {
     private final OrdersRepo repo;
     private final UserService userService;
 
-    @Cacheable(value = "orders", key="#email")
+    @Cacheable(value = "ordersByUserId", key="#email")
     public List<Order> getOrdersByUserId(String email) {
         User user = userService.getAllUserData(email);
         return repo.findByUserId(user.getId());
