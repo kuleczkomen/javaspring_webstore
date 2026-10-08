@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.webstore.model.User;
 import my.webstore.model.UserPrincipal;
 import my.webstore.repo.UserRepo;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,17 +17,14 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
 
     private final UserRepo repo;
+    private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = repo.findByEmail(email);
+        User user = repo.findByEmail(email).
+                orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
-        if(user.isEmpty()) {
-            // IO.println("User with email '%s' not found".formatted(email));
-            throw new UsernameNotFoundException("user not found");
-        }
-
-        return new UserPrincipal(user.get());
+        return new UserPrincipal(user);
 
      }
 }

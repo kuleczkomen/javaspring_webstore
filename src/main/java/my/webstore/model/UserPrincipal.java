@@ -7,7 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -15,9 +15,10 @@ public class UserPrincipal implements UserDetails {
 
     private final User user;
 
+    // changed from default to checking user role
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority(user.getRole().toString()));
     }
 
     @Override

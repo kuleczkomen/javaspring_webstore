@@ -34,4 +34,13 @@ build/
 
 # safety
 src/main/resources/application.properties
+# zip
+.zip
+
+.gitattributes
+
+#env
 .env
+
+# GCP
+google-cloud-sdk

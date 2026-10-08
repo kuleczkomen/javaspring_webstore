@@ -33,7 +33,9 @@ public class ProductService {
     @Cacheable(value = "products", key = "#prodId")
     public Product getProductById(int prodId) {
         return repo.findById(prodId)
-                .orElseThrow();
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Product not found"));
     }
 
     @CacheEvict(value = "productList", allEntries = true)
@@ -48,6 +50,10 @@ public class ProductService {
 
     @CacheEvict(value = "productList", allEntries = true)
     public void updateProduct(Product product) {
+        Product _ = repo.findById(product.getId())
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Product doesn't exist"));
         repo.save(product);
     }
 
