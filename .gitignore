@@ -32,6 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
+# safety
+src/main/resources/application.properties
 # zip
 .zip
 
@@ -39,3 +41,6 @@ build/
 
 #env
 .env
+
+# GCP
+google-cloud-sdk

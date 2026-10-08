@@ -33,19 +33,18 @@ public class SecurityConfig {
                 // csrf is not saved -> logging in another browser requires new authentication
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(r -> r
-                    .requestMatchers("/error").permitAll()
-                    .requestMatchers("/api/users/register", "/api/users/login").permitAll()
-                        //to change
-                    .requestMatchers("/api/admin/login", "/api/admin/register").permitAll()
+                    .requestMatchers(
+                            "/error",
+                            "/api/register",
+                            "/api/login",
+                            "/api/admin/login",
+                            "/api/admin/register")
+                        .permitAll()
                     .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated())
-                    // login form
-                    // .httpBasic(Customizer.withDefaults())
-                // http is stateless
                 .sessionManagement(s -> s
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // using jwt filter before user and password filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -5,6 +5,8 @@ import my.webstore.config.SecurityConfig;
 import my.webstore.model.Role;
 import my.webstore.model.User;
 import my.webstore.repo.UserRepo;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import my.webstore.http.request.user.LoginRequest;
 import my.webstore.http.request.user.PasswordRequest;
 import my.webstore.http.request.user.RegisterRequest;
@@ -19,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -28,6 +32,9 @@ public class UserService {
     private final AuthenticationManager authManager;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(SecurityConfig.getSTRENGTH());
 
+    public List<User> getUsers() {
+        return repo.findAll();
+    }
 
     public void register(RegisterRequest request) {
         // not allowing users with the same email
@@ -65,15 +72,20 @@ public class UserService {
 
     }
 
+
     public User getAllUserData(String email) {
         return repo.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found"));
     }
 
 
     public UserResponse getUser(String email) {
         User user = repo.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found"));
         return UserResponse.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
@@ -88,20 +100,28 @@ public class UserService {
     public void changePassword(User user, PasswordRequest request) {
         // we compare hashes as oldPassword is stored in DB as a hash
         if(!encoder.matches(request.oldPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Old password is incorrect");
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Old password is incorrect");
         }
 
         if(encoder.matches(request.newPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current password is the same");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Current password is the same");
         };
 
         if(!validatePassword(request.newPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid password");
         };
 
         // here we only need to compare string values
         if(!request.newPassword().equals(request.repeatPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords don't match");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Passwords don't match");
         }
 
         user.setPassword(encoder.encode(request.newPassword()));

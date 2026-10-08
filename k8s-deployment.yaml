@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: java-backend
+  template:
+    metadata:
+      labels:
+        app: java-backend
+    spec:
+      containers:
+        - name: java-backend
+          image: ${REGION/-docker.pkg.dev/PROJECT_ID/REPO/IMAGE:v1}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: REDIS_HOST
+              value: ${GCP_REDIS_HOST}
+            - name: SPRING_DATASOURCE_URL
+              value: ${spring.datasource.url}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: ${spring.datasource.username}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ${spring.datasource.password}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-backend-service
+spec:
+  type: LoadBalancer 
+  selector:
+    app: java-backend
+  ports:
+    - port: 80
+      targetPort: 8080
